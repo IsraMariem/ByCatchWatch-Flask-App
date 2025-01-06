@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
 
-
+from flask_login import login_required
 bp = Blueprint('bycatch', __name__, url_prefix='/bycatch')
 
 
@@ -16,6 +16,7 @@ from app.models import Bycatch
 
 # Create a new Bycatch
 @bp.route('/', methods=['POST'])
+@login_required
 def create_bycatch():
     data = request.get_json() 
     errors = bycatch_schema.validate(data) 

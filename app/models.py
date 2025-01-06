@@ -1,5 +1,6 @@
 from datetime import datetime
 from app.extensions import db
+from enum import Enum, auto
 
 
 class Port(db.Model):
@@ -59,3 +60,25 @@ class Report(db.Model):
 
     species = db.relationship('Species', backref='reports', uselist=False)
 
+
+from app.extensions import db
+from flask_login import UserMixin
+
+
+class UserBackground(Enum):
+    RESEARCHER = 'Researcher'
+    FISHERMAN = 'Fisherman'
+    NGO = 'NGO'
+    BYCATCH_ACTIVIST = 'Bycatch Activist'
+    OBSERVER = 'Observer'
+
+
+class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    background = db.Column(db.Enum(UserBackground), nullable=False) 
+    def __repr__(self):
+        return f"<User {self.username}>"
