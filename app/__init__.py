@@ -5,6 +5,7 @@ import os
 from app.routes.visualizations import visualization_bp
 from app.routes.auth import auth_bp
 from app.models import User  
+from app.routes.recomm import bp_recom
 
 def create_app():
     app = Flask(__name__)
@@ -29,6 +30,7 @@ def create_app():
     app.register_blueprint(report.bp)
     app.register_blueprint(visualization_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(bp_recom, url_prefix='/api')
 
     # Create tables if they don't exist
     with app.app_context():
