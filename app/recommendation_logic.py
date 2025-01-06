@@ -13,11 +13,11 @@ def generate_recommendations(user_id):
         bycatch_data = Bycatch.query.join(Species).filter(Species.mortality_rate > 0.5).limit(5).all()
     else:
         # Default recommendation for others
-        bycatch_data = Bycatch.query.limit(5).all()
+        bycatch_data = Bycatch.query.limit(3).all()
     
     # Create a recommendation for the user
     for catch in bycatch_data:
-        recommendation = Recommendation(user_id=user_id, content=f"Recommended species: {catch.species_id} caught at {catch.port_id}")
+        recommendation = Recommendation(user_id=user_id, content=f"Recommended species: {catch.species_id} caught at {catch.port_id} needed to be monitered more closely.")
         db.session.add(recommendation)
     
     db.session.commit()

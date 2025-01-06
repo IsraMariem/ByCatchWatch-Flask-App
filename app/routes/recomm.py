@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from app.recommendation_logic import generate_recommendations
-from models import Recommendation
+from app.models import Recommendation
 
 bp_recom= Blueprint('recommendations', __name__)
 
