@@ -1,0 +1,34 @@
+from flask import Blueprint, request, jsonify
+from app.extensions import db
+from app.models import Bycatch
+from app.schemas import BycatchStatSchema
+
+bp = Blueprint('bycatch', __name__, url_prefix='/bycatch')
+
+# Instantiate schema
+bycatch_schema = BycatchStatSchema()
+bycatchs_schema = BycatchStatSchema(many=True)
+
+
+
+# Create a new Bycatch
+@bp.route('/', methods=['POST'])
+def create_bycatch():
+    data = request.get_json() 
+    errors = bycatch_schema.validate(data) 
+    if errors:
+        return jsonify({"errors": errors}), 400  
+
+    new_bycatch = Bycatch(**data) 
+    db.session.add(new_bycatch)  
+    db.session.commit()  
+
+    return bycatch_schema.jsonify(new_bycatch), 201 
+
+# Get all bycatch records
+@bp.route('/', methods=['GET'])
+def get_bycatch():
+    bycatch = Bycatch.query.all()  
+    return jsonify(bycatch_schema.dump(bycatch, many=True)), 200  
+
+
