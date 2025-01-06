@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from app.models import Port
 from app.schemas import PortSchema
 
 bp = Blueprint('ports', __name__, url_prefix='/ports')
@@ -8,6 +7,7 @@ bp = Blueprint('ports', __name__, url_prefix='/ports')
 # Instantiate schema
 port_schema = PortSchema()
 ports_schema = PortSchema(many=True)
+from app.models import Port
 
 # Create a new port
 @bp.route('/', methods=['POST'])

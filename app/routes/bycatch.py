@@ -1,15 +1,18 @@
 from flask import Blueprint, request, jsonify
 from app.extensions import db
-from app.models import Bycatch
-from app.schemas import BycatchStatSchema
+
 
 bp = Blueprint('bycatch', __name__, url_prefix='/bycatch')
 
-# Instantiate schema
+
+
+
+from app.schemas import BycatchStatSchema
+
 bycatch_schema = BycatchStatSchema()
 bycatchs_schema = BycatchStatSchema(many=True)
 
-
+from app.models import Bycatch
 
 # Create a new Bycatch
 @bp.route('/', methods=['POST'])
@@ -30,5 +33,3 @@ def create_bycatch():
 def get_bycatch():
     bycatch = Bycatch.query.all()  
     return jsonify(bycatch_schema.dump(bycatch, many=True)), 200  
-
-

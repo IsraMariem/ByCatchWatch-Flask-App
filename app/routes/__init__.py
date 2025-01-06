@@ -1,3 +1,4 @@
+
 from flask import Flask
 from app.extensions import db, ma, migrate
 from app.routes import ports, bycatch, species, report
@@ -25,6 +26,3 @@ def create_app():
         db.create_all()  # Creates all tables defined in your SQLAlchemy models
     
     return app
-
-
-
