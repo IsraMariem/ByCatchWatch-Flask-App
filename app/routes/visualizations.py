@@ -9,7 +9,6 @@ matplotlib.use('Agg')
 import numpy as np
 import os
 
-"""from app.routes.decorators import login_required """
 
 charts_folder = "./Charts"
 

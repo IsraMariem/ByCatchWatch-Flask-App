@@ -75,7 +75,7 @@ def current_user_info():
 @auth_bp.route('/restricted', methods=['GET'])
 @login_required
 def restricted_access():
-    allowed_backgrounds = ['researcher', 'activist']
+    allowed_backgrounds = ['researcher', 'activist','fisherman']
     if current_user.background.name.lower() not in allowed_backgrounds:  # Access control with Enum names
         return jsonify({"error": "Access denied"}), 403
 

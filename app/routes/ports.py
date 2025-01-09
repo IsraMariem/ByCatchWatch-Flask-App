@@ -37,3 +37,23 @@ def get_ports():
     # Return the serialized data as a JSON response
     return jsonify(ports_data), 200
 
+
+
+@bp.route('/<int:id>', methods=['PUT'])
+def update_port(id):
+    data = request.get_json()
+    errors = port_schema.validate(data)
+    if errors:
+        return jsonify({"errors": errors}), 400
+
+    port = Port.query.get(id)  # Find the Port by ID
+    if not port:
+        return jsonify({"error": "Port not found"}), 404
+
+    # Update the port with the new data (replace the entire resource)
+    for key, value in data.items():
+        setattr(port, key, value)
+
+    db.session.commit()  # Commit the changes to the database
+    
+    return port_schema.jsonify(port), 200
