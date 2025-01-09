@@ -6,7 +6,7 @@ from app.routes.visualizations import visualization_bp
 from app.routes.auth import auth_bp
 from app.models import User  
 from app.routes.recomm import bp_recom
-
+from app.routes.clustering import clustering_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object("app.config.Config")
@@ -31,7 +31,7 @@ def create_app():
     app.register_blueprint(visualization_bp)
     app.register_blueprint(auth_bp)
     app.register_blueprint(bp_recom, url_prefix='/api')
-
+    app.register_blueprint(clustering_bp, url_prefix='/clustering')
     # Create tables if they don't exist
     with app.app_context():
         db.create_all()
