@@ -2,11 +2,53 @@ from flask import Blueprint, request, jsonify
 from app.models import User, UserBackground
 from app.extensions import db, bcrypt
 from flask_login import login_user, logout_user, login_required, current_user
-
+from flasgger import swag_from
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 # Register a new user
+
 @auth_bp.route('/register', methods=['POST'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Register a new user in the system.',
+    'parameters': [
+        {
+            'name': 'body',
+            'in': 'body',
+            'description': 'User registration data',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'username': {'type': 'string', 'example': 'john_doe'},
+                    'email': {'type': 'string', 'example': 'john@example.com'},
+                    'password': {'type': 'string', 'example': 'password123'},
+                    'background': {'type': 'string', 'example': 'researcher'}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '201': {
+            'description': 'User successfully registered',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'User registered successfully!'}
+                }
+            }
+        },
+        '400': {
+            'description': 'Invalid input or user already exists',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {'type': 'string'}
+                }
+            }
+        }
+    }
+})
 def register():
     data = request.get_json()
 
@@ -44,6 +86,45 @@ def register():
 
 # Login user
 @auth_bp.route('/login', methods=['POST'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Login an existing user.',
+    'parameters': [
+        {
+            'name': 'body',
+            'in': 'body',
+            'description': 'User login data',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'email': {'type': 'string', 'example': 'john@example.com'},
+                    'password': {'type': 'string', 'example': 'password123'}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'User successfully logged in',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'Logged in successfully!'}
+                }
+            }
+        },
+        '401': {
+            'description': 'Invalid credentials',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {'type': 'string', 'example': 'Invalid credentials'}
+                }
+            }
+        }
+    }
+})
 def login():
     data = request.get_json()
 
@@ -56,6 +137,21 @@ def login():
 
 # Logout user
 @auth_bp.route('/logout', methods=['GET'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Logout the current logged-in user.',
+    'responses': {
+        '200': {
+            'description': 'User successfully logged out',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'Logged out successfully!'}
+                }
+            }
+        }
+    }
+})
 @login_required
 def logout():
     logout_user()
@@ -63,6 +159,23 @@ def logout():
 
 # Get current user info
 @auth_bp.route('/current_user', methods=['GET'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Retrieve the current logged-in user\'s information.',
+    'responses': {
+        '200': {
+            'description': 'User information successfully retrieved',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'username': {'type': 'string', 'example': 'john_doe'},
+                    'email': {'type': 'string', 'example': 'john@example.com'},
+                    'background': {'type': 'string', 'example': 'researcher'}
+                }
+            }
+        }
+    }
+})
 @login_required
 def current_user_info():
     return jsonify({
@@ -73,6 +186,30 @@ def current_user_info():
 
 # Example of restricting access based on background
 @auth_bp.route('/restricted', methods=['GET'])
+@swag_from({
+    'tags': ['Authentication'],
+    'description': 'Access a restricted area based on user background.',
+    'responses': {
+        '200': {
+            'description': 'Access granted to restricted area',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'message': {'type': 'string', 'example': 'Welcome to the restricted area!'}
+                }
+            }
+        },
+        '403': {
+            'description': 'Access denied due to insufficient background',
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'error': {'type': 'string', 'example': 'Access denied'}
+                }
+            }
+        }
+    }
+})
 @login_required
 def restricted_access():
     allowed_backgrounds = ['researcher', 'activist','fisherman']
