@@ -8,6 +8,7 @@ from app.models import User
 from app.routes.recomm import bp_recom
 from app.routes.clustering import clustering_bp
 from flasgger import Swagger
+from app import Recommendations2
 
 
 
