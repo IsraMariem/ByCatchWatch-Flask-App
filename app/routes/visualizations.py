@@ -8,11 +8,13 @@ import matplotlib
 matplotlib.use('Agg')
 import numpy as np
 import os
+from flasgger import swag_from
 
 
 charts_folder = "./Charts"
 
 visualization_bp = Blueprint('visualizations', __name__,url_prefix='/visualizations')
+
 
 # Total Bycatch Quantity by Location
 def generate_total_catch_by_location():
@@ -52,6 +54,25 @@ def generate_total_catch_by_location():
 
 
 @visualization_bp.route('/total-catch-by-location', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Returns a bar chart showing the total bycatch quantity by location.',
+    'responses': {
+        '200': {
+            'description': 'Bar chart showing total bycatch by location',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'Base64 encoded image data'
+                    }
+                }
+            }
+        },
+        '404': {
+            'description': 'No data available for total catch by location.'
+        }
+    }
+})
 def total_catch_by_location():
     chart_base64 = generate_total_catch_by_location()
     if chart_base64 is None:
@@ -61,6 +82,7 @@ def total_catch_by_location():
 from datetime import datetime
 
 # Bycatch Quantity Over Time
+
 def generate_bycatch_trends():
     result = db.session.query(Bycatch.date_caught, db.func.sum(Bycatch.quantity).label('total_bycatch'))\
                        .group_by(Bycatch.date_caught).order_by(Bycatch.date_caught).all()
@@ -92,6 +114,25 @@ def generate_bycatch_trends():
     return img_base64
 
 @visualization_bp.route('/bycatchtime-trends', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Returns a line chart showing bycatch quantity trends over time.',
+    'responses': {
+        '200': {
+            'description': 'Line chart showing bycatch trends over time.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'Base64 encoded image data'
+                    }
+                }
+            }
+        },
+        '404': {
+            'description': 'No data available for bycatch trends.'
+        }
+    }
+})
 def get_bycatch_time_trends():
     chart_base64 = generate_bycatch_trends()
     if chart_base64 is None:
@@ -150,6 +191,32 @@ def generate_species_mortality_analysis():
 
 
 @visualization_bp.route('/speciesmortality-analysis', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Get a bar chart visualization of species mortality rates.',
+    'responses': {
+        '200': {
+            'description': 'A base64-encoded image of the species mortality rate analysis chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'base64_encoded_string_here'
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Failed to generate the species mortality analysis chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'error': 'Failed to generate species mortality analysis'
+                    }
+                }
+            }
+        }
+    }
+})
 def get_species_mortality_analysis():
     chart_base64 = generate_species_mortality_analysis()
     if chart_base64:
