@@ -7,7 +7,6 @@ def generate_recommendations(user_id):
     if not user:
         return "User not found."
 
-    # Initialize recommendations and a set to track recommended species
     recommendations = []
     recommended_species = set()
 
@@ -65,7 +64,6 @@ def generate_recommendations(user_id):
                 )
     
     else:  # Default recommendations for other users
-        # General user-focused recommendation
         bycatch_data = Bycatch.query.order_by(Bycatch.quantity.desc()).limit(3).all()
 
         for catch in bycatch_data:
@@ -76,7 +74,7 @@ def generate_recommendations(user_id):
                 f"At port {port.name}, consider observing {species.common_name} ({species.scientific_name}), which has been frequently caught. Gear type used: {catch.gear_type}. Regular monitoring is advised."
             )
 
-    # Fishing method-specific recommendations (max 3)
+    # Fishing method-specific recommendations 
     gear_bycatch = (
         Bycatch.query
         .with_entities(Bycatch.gear_type, db.func.sum(Bycatch.quantity).label('total_quantity'))
@@ -94,7 +92,6 @@ def generate_recommendations(user_id):
             )
         )
 
-    # Bulk save all recommendations and commit
     if recommendations:
         db.session.bulk_save_objects(recommendations)
         db.session.commit()

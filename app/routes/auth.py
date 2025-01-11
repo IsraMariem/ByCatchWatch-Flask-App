@@ -77,7 +77,7 @@ def register():
         username=data['username'],
         email=data['email'],
         password=hashed_password,
-        background=UserBackground[background.upper()]  # Convert background to Enum
+        background=UserBackground[background.upper()]  
     )
     db.session.add(new_user)
     db.session.commit()
@@ -181,7 +181,7 @@ def current_user_info():
     return jsonify({
         "username": current_user.username,
         "email": current_user.email,
-        "background": current_user.background.name  # Use .name to return the Enum's name
+        "background": current_user.background.name  
     }), 200
 
 # Example of restricting access based on background
@@ -213,7 +213,7 @@ def current_user_info():
 @login_required
 def restricted_access():
     allowed_backgrounds = ['researcher', 'activist','fisherman']
-    if current_user.background.name.lower() not in allowed_backgrounds:  # Access control with Enum names
+    if current_user.background.name.lower() not in allowed_backgrounds:  
         return jsonify({"error": "Access denied"}), 403
 
     return jsonify({"message": "Welcome to the restricted area!"}), 200

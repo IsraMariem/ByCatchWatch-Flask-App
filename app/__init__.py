@@ -8,8 +8,8 @@ from app.models import User
 from app.routes.recomm import bp_recom
 from app.routes.clustering import clustering_bp
 from flasgger import Swagger
-from app import Recommendations2
-
+from app.routes.gear_prediction import recommend_gear
+from app.routes.gear_prediction import gear_bp
 
 
 def create_app():
@@ -38,6 +38,8 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(bp_recom, url_prefix='/api')
     app.register_blueprint(clustering_bp, url_prefix='/clustering')
+    app.register_blueprint(gear_bp, url_prefix='/api')
+
     # Create tables if they don't exist
     with app.app_context():
         db.create_all()

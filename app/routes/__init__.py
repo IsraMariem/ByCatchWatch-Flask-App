@@ -8,7 +8,6 @@ from .visualizations import visualization_bp
 def create_app():
     app = Flask(__name__)
     app.config.from_object("app.config.Config")
-    # Initialize extensions
     db.init_app(app)
     ma.init_app(app)
     migrate.init_app(app, db)
@@ -21,8 +20,6 @@ def create_app():
     app.register_blueprint(visualization_bp)
 
 
-    # Create tables if they don't exist (you can add this after initializing the app)
     with app.app_context():
-        db.create_all()  # Creates all tables defined in your SQLAlchemy models
-    
+        db.create_all()  
     return app

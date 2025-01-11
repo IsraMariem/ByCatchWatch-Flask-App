@@ -1,4 +1,3 @@
-# Marshmallow schemas
 
 from marshmallow import Schema, fields, validate
 from app.models import Port, Bycatch, Species, Report
@@ -14,7 +13,7 @@ class PortSchema(Schema):
     phone = fields.Str()
     email = fields.Email()
 
-# Bycatch Stat Schema
+# Bycatch Schema
 class BycatchStatSchema(Schema):
     bycatch_id = fields.Str(required=True)   
     gear_type = fields.Str(required=True)

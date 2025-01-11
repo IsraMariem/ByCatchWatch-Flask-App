@@ -9,7 +9,7 @@ class Port(db.Model):
     name = db.Column(db.String(100), nullable=False)
     location = db.Column(db.String(255), nullable=True)
     size = db.Column(db.String(50), nullable=False)  # Small, Medium, Large
-    region = db.Column(db.String(100), nullable=True)  # Governorate in Tunisia
+    region = db.Column(db.String(100), nullable=True)  
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     authority_name = db.Column(db.String(100))
