@@ -14,3 +14,6 @@ def get_recommended_gear(species_name, region):
         gear = species_gear_map.get(species_name, ["Unknown gear"])
 
     return gear
+
+
+
