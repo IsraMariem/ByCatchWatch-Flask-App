@@ -268,6 +268,32 @@ def generate_gear_efficiency():
         return None
 
 @visualization_bp.route('/gearefficiency', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Get a bar chart visualization of gear type efficiency (Average BPUE).',
+    'responses': {
+        '200': {
+            'description': 'A base64-encoded image of the gear type efficiency analysis chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'base64_encoded_string_here'
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Failed to generate the gear efficiency analysis chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'error': 'Failed to generate gear efficiency analysis'
+                    }
+                }
+            }
+        }
+    }
+})
 def get_gear_efficiency():
     chart_base64 = generate_gear_efficiency()
     if chart_base64:
@@ -332,6 +358,32 @@ def generate_catch_distribution():
     return img_base64
 
 @visualization_bp.route('/catch-distribution', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Get a stacked bar chart visualization of catch distribution by species and port.',
+    'responses': {
+        '200': {
+            'description': 'A base64-encoded image of the catch distribution chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'base64_encoded_string_here'
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Failed to generate the catch distribution chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'error': 'Failed to generate catch distribution analysis'
+                    }
+                }
+            }
+        }
+    }
+})
 def get_catch_distribution():
     chart_base64 = generate_catch_distribution()
     return jsonify({'chart': chart_base64})
@@ -367,6 +419,32 @@ def generate_iucn_status_analysis():
     return img_base64
 
 @visualization_bp.route('/spstatus-analysis', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Get a stacked bar chart visualization of catch distribution by species and port.',
+    'responses': {
+        '200': {
+            'description': 'A base64-encoded image of the catch distribution chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'base64_encoded_string_here'
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Failed to generate the catch distribution chart.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'error': 'Failed to generate catch distribution analysis'
+                    }
+                }
+            }
+        }
+    }
+})
 def get_iucn_status_analysis():
     chart_base64 = generate_iucn_status_analysis()
     return jsonify({'chart': chart_base64})
@@ -432,11 +510,37 @@ def generate_dashboard():
 
 # Dashboard Endpoint
 @visualization_bp.route('/dashboard', methods=['GET'])
+@swag_from({
+    'tags': ['Visualizations'],
+    'description': 'Generate a dashboard combining multiple visualizations (Total Catch, Bycatch Trends, Species Mortality, Gear Efficiency, Catch Distribution, IUCN Status Analysis) into one image.',
+    'responses': {
+        '200': {
+            'description': 'A base64-encoded image of the dashboard containing multiple charts.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'chart': 'base64_encoded_dashboard_image_here',
+                        'image_path': 'dashboard.png'
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Failed to generate the dashboard.',
+            'content': {
+                'application/json': {
+                    'example': {
+                        'error': 'Failed to generate dashboard'
+                    }
+                }
+            }
+        }
+    }
+})
 def dashboard():
     chart_base64, img_path = generate_dashboard()
 
     if chart_base64:
-        # Return the dashboard as a base64 string and a path to the saved image
         return jsonify({
             'chart': chart_base64,
             'image_path': img_path

@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 import matplotlib
-
+from flasgger import swag_from
 matplotlib.use('Agg')
 
 clustering_bp = Blueprint('clustering', __name__)
@@ -72,6 +72,85 @@ def preprocess_species_data2(species_data):
 
 
 @clustering_bp.route('/kmeans', methods=['POST'])
+@swag_from({
+    'tags': ['Clustering'],
+    'description': 'Perform K-Means clustering on species data.',
+    'parameters': [
+        {
+            'name': 'species_data',
+            'in': 'body',
+            'description': 'The species data to cluster.',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'species_data': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'Species_Name': {'type': 'string'},
+                                'Habitat_Type': {'type': 'string'},
+                                'Conservation_Status': {'type': 'string'},
+                                # Add other necessary fields
+                            }
+                        }
+                    },
+                    'num_clusters': {'type': 'integer', 'default': 3}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'Clustering completed successfully.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'clustered_data': {
+                                'type': 'array',
+                                'items': {
+                                    'type': 'object',
+                                    # Define properties of the clustered species data
+                                }
+                            },
+                            'chart': {'type': 'string', 'format': 'byte'},
+                            'chart_url': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        },
+        '400': {
+            'description': 'Invalid input or data issues.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Internal server error.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 def kmeans():
     try:
         data = request.get_json()
@@ -104,6 +183,85 @@ def kmeans():
 
 
 @clustering_bp.route('/cluster_analysis', methods=['POST'])
+@swag_from({
+    'tags': ['Clustering'],
+    'description': 'Perform K-Means clustering on species data and provide cluster analysis including cluster centers and counts.',
+    'parameters': [
+        {
+            'name': 'species_data',
+            'in': 'body',
+            'description': 'The species data to cluster.',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'species_data': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'Species_Name': {'type': 'string'},
+                                'Habitat_Type': {'type': 'string'},
+                                'Conservation_Status': {'type': 'string'},
+                                'Fishing_Gear_Type': {'type': 'string'},
+                                # Add other necessary fields as per your dataset
+                            }
+                        }
+                    },
+                    'num_clusters': {'type': 'integer', 'default': 3}
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'Cluster analysis completed successfully.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'cluster_centers': {
+                                'type': 'array',
+                                'items': {'type': 'array', 'items': {'type': 'number'}}
+                            },
+                            'cluster_counts': {
+                                'type': 'object',
+                                'additionalProperties': {'type': 'integer'}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        '400': {
+            'description': 'Missing species data or invalid input.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Internal server error.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 def cluster_analysis():
     try:
         data = request.get_json()
@@ -149,6 +307,77 @@ def cluster_analysis():
 
 
 @clustering_bp.route('/optimal_clusters', methods=['POST'])
+@swag_from({
+    'tags': ['Clustering'],
+    'description': 'Determine the optimal number of clusters for K-Means clustering using the Elbow Method.',
+    'parameters': [
+        {
+            'name': 'species_data',
+            'in': 'body',
+            'description': 'The species data to find the optimal number of clusters for.',
+            'required': True,
+            'schema': {
+                'type': 'object',
+                'properties': {
+                    'species_data': {
+                        'type': 'array',
+                        'items': {
+                            'type': 'object',
+                            'properties': {
+                                'Species_Name': {'type': 'string'},
+                                'Habitat_Type': {'type': 'string'},
+                                'Conservation_Status': {'type': 'string'},
+                                'Fishing_Gear_Type': {'type': 'string'},
+                                # Add other necessary fields as per your dataset
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    'responses': {
+        '200': {
+            'description': 'Optimal number of clusters plot saved successfully.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'message': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        },
+        '400': {
+            'description': 'Missing species data or invalid input.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        },
+        '500': {
+            'description': 'Internal server error.',
+            'content': {
+                'application/json': {
+                    'schema': {
+                        'type': 'object',
+                        'properties': {
+                            'error': {'type': 'string'}
+                        }
+                    }
+                }
+            }
+        }
+    }
+})
 def optimal_clusters():
     try:
         data = request.get_json()
