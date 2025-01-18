@@ -1,3 +1,6 @@
+Here’s the complete and updated `README.md` file in a single block for easy copy-pasting:
+
+```markdown
 # ByCatch Flask App
 
 ## Description
@@ -26,16 +29,54 @@ Follow these steps to set up the project locally:
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/IsraMariem/ByCatch-Flask-App.git
+   ```
 
-   2. Set up a virtual environment:
-      ```bash
-      python -m venv venv
-      ```
-   3. Install dependencies:
-      ```bash
-      pip install -r requirements.txt
-      ```
-   4. Run the app:
-      ```bash
-      flask run
-      ```
+2. **Set up a virtual environment**:
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate the virtual environment**:
+   - On Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+5. **Run the app**:
+   ```bash
+   flask run
+   ```
+
+6. **Access the API documentation**:
+   Open your browser and navigate to `http://127.0.0.1:5000/apidocs` to view the Swagger UI.
+
+## Docker Setup
+To run the app using Docker:
+
+1. **Build the Docker image**:
+   ```bash
+   docker build -t bycatch-flask-app .
+   ```
+
+2. **Run the Docker container**:
+   ```bash
+   docker run -p 5000:5000 bycatch-flask-app
+   ```
+
+3. **Access the app**:
+   Open your browser and navigate to `http://127.0.0.1:5000`.
+
+
+## API Endpoints
+
+![API - EndPoints](https://github.com/user-attachments/assets/75d9f51b-8b22-4b9a-a0a1-5c5161e7b4a7)
+
