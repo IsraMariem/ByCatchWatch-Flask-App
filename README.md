@@ -1,7 +1,6 @@
 
-# ByCatch Flask App
+# ByCatchWatch Flask App
 
-## Description
 This is a Flask application designed to analyze bycatch data, provide gear recommendations, and visualize the results using various charts and graphs. The app also includes clustering functionality to group species based on shared characteristics and predict optimal fishing gear for specific species and regions.
 
 ## Features
@@ -12,14 +11,6 @@ This is a Flask application designed to analyze bycatch data, provide gear recom
 - **API Documentation**: Detailed API documentation using Swagger/OpenAPI specifications.
 - **Docker Support**: Containerized for easy deployment using Docker.
 
-## Changes Made
-- Initial commit with app structure.
-- Added functionality for bycatch data processing.
-- Integrated chart visualization for bycatch statistics.
-- Set up Docker containerization and environment variables.
-- Added clustering functionality using K-Means.
-- Implemented gear recommendation logic.
-- Added API documentation using Flasgger.
 
 ## Installation
 Follow these steps to set up the project locally:
