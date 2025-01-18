@@ -1,6 +1,4 @@
-Here’s the complete and updated `README.md` file in a single block for easy copy-pasting:
 
-```markdown
 # ByCatch Flask App
 
 ## Description
