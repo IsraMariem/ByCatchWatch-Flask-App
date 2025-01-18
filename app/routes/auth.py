@@ -52,27 +52,22 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     data = request.get_json()
 
-    # Validate required fields
     required_fields = ['username', 'email', 'password', 'background']
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"'{field}' is required"}), 400
 
-    # Validate background field
     allowed_backgrounds = [background.name.lower() for background in UserBackground]
     background = data.get('background', '').lower()
     if background not in allowed_backgrounds:
         return jsonify({"error": "Invalid background."}), 400
 
-    # Check if user already exists
     existing_user = User.query.filter_by(email=data['email']).first()
     if existing_user:
         return jsonify({"error": "User already exists"}), 400
 
-    # Hash the password
     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
-    # Create a new user with the correct Enum value for background
     new_user = User(
         username=data['username'],
         email=data['email'],

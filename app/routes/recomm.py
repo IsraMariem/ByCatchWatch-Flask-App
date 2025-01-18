@@ -47,7 +47,7 @@ bp_recom = Blueprint('recommendations', __name__)
                         'properties': {
                             'message': {
                                 'type': 'string',
-                                'example': 'User not found'  # Can also be 'No recommendations generated'
+                                'example': 'User not found'  
                             }
                         }
                     }
@@ -76,17 +76,13 @@ def get_recommendations(user_id):
     """
     Generate and retrieve recommendations for a specific user.
     """
-    # Generate recommendations for the user
     result = generate_recommendations(user_id)
 
-    # If no user is found or no recommendations are generated, return an appropriate message
-    if isinstance(result, str):  # This handles the "User not found" or "No recommendations generated" case
+    if isinstance(result, str):  
         return jsonify({'message': result}), 404
 
-    # Retrieve the user's recommendations from the database
     recommendations = Recommendation.query.filter_by(user_id=user_id).all()
 
-    # Return recommendations as a JSON response
     return jsonify([{'content': rec.content} for rec in recommendations]), 200
 
 

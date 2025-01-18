@@ -113,7 +113,6 @@ def preprocess_species_data2(species_data):
                                 'type': 'array',
                                 'items': {
                                     'type': 'object',
-                                    # Define properties of the clustered species data
                                 }
                             },
                             'chart': {'type': 'string', 'format': 'byte'},
@@ -204,7 +203,6 @@ def kmeans():
                                 'Habitat_Type': {'type': 'string'},
                                 'Conservation_Status': {'type': 'string'},
                                 'Fishing_Gear_Type': {'type': 'string'},
-                                # Add other necessary fields as per your dataset
                             }
                         }
                     },
@@ -276,7 +274,6 @@ def cluster_analysis():
         kmeans = KMeans(n_clusters=num_clusters, random_state=0)
         processed_data['Cluster'] = kmeans.fit_predict(processed_data)
 
-        # cluster centers and number of items in each cluster
         cluster_centers = kmeans.cluster_centers_.tolist()
         cluster_counts = processed_data['Cluster'].value_counts().to_dict()
 
@@ -328,7 +325,6 @@ def cluster_analysis():
                                 'Habitat_Type': {'type': 'string'},
                                 'Conservation_Status': {'type': 'string'},
                                 'Fishing_Gear_Type': {'type': 'string'},
-                                # Add other necessary fields as per your dataset
                             }
                         }
                     }
@@ -388,30 +384,28 @@ def optimal_clusters():
         species_data = pd.DataFrame(data['species_data'])
         processed_data = preprocess_species_data2(species_data)
 
-        # Calculate WCSS (Within-Cluster Sum of Squares) for different cluster counts
+        # Calculate  (Within-Cluster Sum of Squares) for different cluster counts
         wcss = []
         for i in range(1, 11):
             kmeans = KMeans(n_clusters=i, random_state=0)
             kmeans.fit(processed_data)
             wcss.append(kmeans.inertia_)
 
-        # Generate an elbow plot
+        #  elbow plot
         plt.figure()
         plt.plot(range(1, 11), wcss, marker='o')
         plt.title('Elbow Method for Optimal Clusters')
         plt.xlabel('Number of Clusters')
         plt.ylabel('WCSS')
 
-        # Save the plot as a PNG file in the Charts folder
         charts_folder = 'Charts'
         if not os.path.exists(charts_folder):
-            os.makedirs(charts_folder)  # Create the Charts folder if it doesn't exist
+            os.makedirs(charts_folder)  
 
         plot_filename = os.path.join(charts_folder, 'elbow_plot.png')
         plt.savefig(plot_filename, format='png')
         plt.close()
 
-        # Return the file path in the response
         return jsonify({'message': f'Plot saved as {plot_filename}'}), 200
 
     except Exception as e:

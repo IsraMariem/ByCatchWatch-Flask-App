@@ -24,7 +24,7 @@ def generate_recommendations(user_id):
     # Recommendation logic for different user backgrounds
     if user.background == 'RESEARCHER':
         # Researcher-focused recommendation
-        bycatch_data = Bycatch.query.order_by(Bycatch.quantity.desc()).limit(3).all()
+        bycatch_data = Bycatch.query.order_by(Bycatch.quantity.desc()).limit(2).all()
 
         for catch in bycatch_data:
             species = catch.species
@@ -64,14 +64,14 @@ def generate_recommendations(user_id):
                 )
     
     else:  # Default recommendations for other users
-        bycatch_data = Bycatch.query.order_by(Bycatch.quantity.desc()).limit(3).all()
+        bycatch_data = Bycatch.query.order_by(Bycatch.quantity.desc()).limit(2).all()
 
         for catch in bycatch_data:
             species = catch.species
             port = Port.query.filter_by(port_id=catch.port_id).first()
             add_recommendation(
                 species,
-                f"At port {port.name}, consider observing {species.common_name} ({species.scientific_name}), which has been frequently caught. Gear type used: {catch.gear_type}. Regular monitoring is advised."
+                f"At {port.name}, consider observing {species.common_name} ({species.scientific_name}), which has been frequently caught. Gear type used: {catch.gear_type}. Regular monitoring is advised."
             )
 
     # Fishing method-specific recommendations 

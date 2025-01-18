@@ -6,8 +6,6 @@ from flasgger import swag_from
 
 bp = Blueprint('species', __name__, url_prefix='/species')
 
-# Instantiate schema
-species_schema = SpeciesSchema()
 speciess_schema = SpeciesSchema(many=True)
 
 # Create a new species
@@ -150,8 +148,8 @@ def create_species():
     }
 })
 def get_species():
-    species = Species.query.all()  # fetch all species from the database
-    return jsonify(species_schema.dump(species,many=True)), 200  # use .dump() to serialize the data
+    species = Species.query.all() 
+    return jsonify(species_schema.dump(species,many=True)), 200  
 
 
 
@@ -269,15 +267,14 @@ def update_species(id):
     if errors:
         return jsonify({"errors": errors}), 400
 
-    species = Species.query.get(id)  # Find the species by ID
+    species = Species.query.get(id) 
     if not species:
         return jsonify({"error": "Species not found"}), 404
 
-    # Update the species with the new data
     for key, value in data.items():
         setattr(species, key, value)
 
-    db.session.commit()  # Commit the changes to the database
+    db.session.commit()  
 
     return jsonify(species_schema.dump(species)), 200
 
@@ -333,11 +330,10 @@ def update_species(id):
     }
 })
 def delete_species(id):
-    species = Species.query.get(id)  # Find the species by ID
+    species = Species.query.get(id)  
     if not species:
         return jsonify({"error": "Species not found"}), 404
 
-    db.session.delete(species)  # Delete the species from the database
-    db.session.commit()  # Commit the changes to the database
-
+    db.session.delete(species)  
+    db.session.commit()  
     return jsonify({'message': 'Species deleted successfully'}), 200
