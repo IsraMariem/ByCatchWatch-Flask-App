@@ -9,7 +9,6 @@ This is a Flask application designed to analyze bycatch data, provide gear recom
 - **Clustering**: Group species into clusters using K-Means clustering for better insights.
 - **Visualization**: Generate scatter plots and Elbow Method plots for clustering results.
 - **API Documentation**: Detailed API documentation using Swagger/OpenAPI specifications.
-- **Docker Support**: Containerized for easy deployment using Docker.
 
 
 ## Installation
@@ -48,21 +47,6 @@ Follow these steps to set up the project locally:
 6. **Access the API documentation**:
    Open your browser and navigate to `http://127.0.0.1:5000/apidocs` to view the Swagger UI.
 
-## Docker Setup
-To run the app using Docker:
-
-1. **Build the Docker image**:
-   ```bash
-   docker build -t bycatch-flask-app .
-   ```
-
-2. **Run the Docker container**:
-   ```bash
-   docker run -p 5000:5000 bycatch-flask-app
-   ```
-
-3. **Access the app**:
-   Open your browser and navigate to `http://127.0.0.1:5000`.
 
 
 ## API Endpoints
